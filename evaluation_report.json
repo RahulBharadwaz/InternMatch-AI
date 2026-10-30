@@ -1,0 +1,210 @@
+{
+  "benchmark_dataset": {
+    "candidates_count": 5,
+    "opportunities_count": 15,
+    "methodology": "Manually labeled ground-truth evaluation set with graded relevance (0=irrelevant, 1=marginal, 2=high)",
+    "evaluation_date": "2026-10-30 18:38:20 UTC"
+  },
+  "models_compared": [
+    "TF-IDF Baseline",
+    "Sentence-BERT Semantic",
+    "Hybrid Recommender"
+  ],
+  "summary_metrics": {
+    "TF-IDF Baseline": {
+      "P@3": 0.8666666666666666,
+      "P@5": 0.5599999999999999,
+      "R@3": 0.8166666666666667,
+      "R@5": 0.8666666666666666,
+      "NDCG@3": 0.9572490948372051,
+      "NDCG@5": 0.9553276773432412,
+      "MRR@3": 1.0,
+      "MRR@5": 1.0,
+      "Avg_Latency_ms": 6.12025260925293
+    },
+    "Sentence-BERT Semantic": {
+      "P@3": 1.0,
+      "P@5": 0.64,
+      "R@3": 0.95,
+      "R@5": 1.0,
+      "NDCG@3": 1.0,
+      "NDCG@5": 1.0,
+      "MRR@3": 1.0,
+      "MRR@5": 1.0,
+      "Avg_Latency_ms": 204.22263145446777
+    },
+    "Hybrid Recommender": {
+      "P@3": 0.8666666666666666,
+      "P@5": 0.64,
+      "R@3": 0.8166666666666667,
+      "R@5": 1.0,
+      "NDCG@3": 0.9572490948372051,
+      "NDCG@5": 0.9919509823300123,
+      "MRR@3": 1.0,
+      "MRR@5": 1.0,
+      "Avg_Latency_ms": 197.55754470825195
+    }
+  },
+  "per_candidate_results": {
+    "Candidate 1: Deep Learning & Computer Vision Enthusiast": {
+      "TF-IDF Baseline": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Sentence-BERT Semantic": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Hybrid Recommender": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      }
+    },
+    "Candidate 2: Full-Stack Web & Python Developer": {
+      "TF-IDF Baseline": {
+        "P@3": 1.0,
+        "R@3": 0.75,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.8,
+        "R@5": 1.0,
+        "NDCG@5": 0.9903929125301808,
+        "MRR@5": 1.0
+      },
+      "Sentence-BERT Semantic": {
+        "P@3": 1.0,
+        "R@3": 0.75,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.8,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Hybrid Recommender": {
+        "P@3": 1.0,
+        "R@3": 0.75,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.8,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      }
+    },
+    "Candidate 3: Cloud & DevOps Automation Specialist": {
+      "TF-IDF Baseline": {
+        "P@3": 0.6666666666666666,
+        "R@3": 0.6666666666666666,
+        "NDCG@3": 0.9072836011519267,
+        "MRR@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 0.6666666666666666,
+        "NDCG@5": 0.9072836011519267,
+        "MRR@5": 1.0
+      },
+      "Sentence-BERT Semantic": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Hybrid Recommender": {
+        "P@3": 0.6666666666666666,
+        "R@3": 0.6666666666666666,
+        "NDCG@3": 0.9072836011519267,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 0.9871451602176229,
+        "MRR@5": 1.0
+      }
+    },
+    "Candidate 4: Product Manager & User Research Associate": {
+      "TF-IDF Baseline": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Sentence-BERT Semantic": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Hybrid Recommender": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      }
+    },
+    "Candidate 5: Data Analyst & Business Intelligence Specialist": {
+      "TF-IDF Baseline": {
+        "P@3": 0.6666666666666666,
+        "R@3": 0.6666666666666666,
+        "NDCG@3": 0.878961873034099,
+        "MRR@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 0.6666666666666666,
+        "NDCG@5": 0.878961873034099,
+        "MRR@5": 1.0
+      },
+      "Sentence-BERT Semantic": {
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "NDCG@3": 1.0,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 1.0,
+        "MRR@5": 1.0
+      },
+      "Hybrid Recommender": {
+        "P@3": 0.6666666666666666,
+        "R@3": 0.6666666666666666,
+        "NDCG@3": 0.878961873034099,
+        "MRR@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "NDCG@5": 0.9726097514324383,
+        "MRR@5": 1.0
+      }
+    }
+  }
+}
