@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Add Opportunity - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Add Opportunity</h1>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.add_opportunity') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Organization Details</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label class="form-label" for="organization">Organization Name</label>
+                            <input type="text" class="form-control" id="organization" name="organization" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="sector">Sector</label>
+                            <input type="text" class="form-control" id="sector" name="sector" placeholder="e.g., Information Technology">
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Opportunity Details</h3>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" for="title">Opportunity Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label" for="qualification_required">Qualification Required</label>
+                            <input type="text" class="form-control" id="qualification_required" name="qualification_required" 
+                                   placeholder="e.g., B.Tech in Computer Science">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="minimum_percentage">Minimum Percentage</label>
+                            <input type="text" class="form-control" id="minimum_percentage" name="minimum_percentage" 
+                                   placeholder="e.g., 60%">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="location">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="domain">Domain</label>
+                            <input type="text" class="form-control" id="domain" name="domain" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="role_type">Role Type</label>
+                            <input type="text" class="form-control" id="role_type" name="role_type" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="stipend">Stipend</label>
+                            <input type="text" class="form-control" id="stipend" name="stipend" 
+                                   placeholder="e.g., ₹15,000/month">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="duration">Duration</label>
+                            <input type="text" class="form-control" id="duration" name="duration" 
+                                   placeholder="e.g., 6 months">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label">Required Skills (comma-separated)</label>
+                        <input type="text" class="form-control" name="skills" 
+                               placeholder="e.g., Python, SQL, JavaScript">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" for="source_url">Source URL</label>
+                        <input type="url" class="form-control" id="source_url" name="source_url" 
+                               placeholder="https://...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add Opportunity</button>
+                        <a href="{{ url_for('admin.opportunities') }}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

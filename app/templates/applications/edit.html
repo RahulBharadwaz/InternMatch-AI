@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Application - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Edit Application</h1>
+        
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-body">
+                <h3 style="color: var(--primary-navy); margin-bottom: 10px;">{{ application.opportunity.title }}</h3>
+                <p style="color: var(--secondary-blue);">{{ application.opportunity.organization.name }}</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('applications.edit', application_id=application.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" for="status">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="interested" {% if application.status == 'interested' %}selected{% endif %}>Interested</option>
+                            <option value="preparing" {% if application.status == 'preparing' %}selected{% endif %}>Preparing</option>
+                            <option value="applied" {% if application.status == 'applied' %}selected{% endif %}>Applied</option>
+                            <option value="assessment" {% if application.status == 'assessment' %}selected{% endif %}>Assessment/Interview</option>
+                            <option value="selected" {% if application.status == 'selected' %}selected{% endif %}>Selected</option>
+                            <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                            <option value="withdrawn" {% if application.status == 'withdrawn' %}selected{% endif %}>Withdrawn</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label" for="application_date">Application Date</label>
+                            <input type="date" class="form-control" id="application_date" name="application_date" 
+                                   value="{{ application.application_date.strftime('%Y-%m-%d') if application.application_date else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="follow_up_reminder">Follow-up Reminder</label>
+                            <input type="date" class="form-control" id="follow_up_reminder" name="follow_up_reminder" 
+                                   value="{{ application.follow_up_reminder.strftime('%Y-%m-%d') if application.follow_up_reminder else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" for="notes">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ application.notes or '' }}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update Application</button>
+                        <a href="{{ url_for('applications.index') }}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

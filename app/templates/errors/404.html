@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <div style="text-align: center; padding: 60px 20px;">
+            <h1 style="font-size: 72px; color: var(--primary-navy); margin-bottom: 20px;">404</h1>
+            <h2 style="color: var(--body-text); margin-bottom: 20px;">Page Not Found</h2>
+            <p style="color: #666; margin-bottom: 30px;">The page you are looking for does not exist or has been moved.</p>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary">Go to Homepage</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

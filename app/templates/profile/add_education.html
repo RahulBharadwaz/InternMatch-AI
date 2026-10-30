@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Add Education - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Add Education</h1>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile.add_education') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label" for="highest_qualification">Highest Qualification</label>
+                            <select class="form-select" id="highest_qualification" name="highest_qualification" required>
+                                <option value="">Select Qualification</option>
+                                <option value="B.Tech">B.Tech</option>
+                                <option value="B.E.">B.E.</option>
+                                <option value="B.Sc">B.Sc</option>
+                                <option value="B.Com">B.Com</option>
+                                <option value="B.A">B.A</option>
+                                <option value="M.Tech">M.Tech</option>
+                                <option value="M.E.">M.E.</option>
+                                <option value="M.Sc">M.Sc</option>
+                                <option value="MBA">MBA</option>
+                                <option value="Diploma">Diploma</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="course">Course</label>
+                            <input type="text" class="form-control" id="course" name="course" 
+                                   placeholder="e.g., Computer Science and Engineering" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="specialization">Specialization</label>
+                            <input type="text" class="form-control" id="specialization" name="specialization" 
+                                   placeholder="e.g., Data Science">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="institution">Institution/College</label>
+                            <input type="text" class="form-control" id="institution" name="institution" 
+                                   placeholder="e.g., Government College of Engineering" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="graduation_year">Graduation Year</label>
+                            <input type="number" class="form-control" id="graduation_year" name="graduation_year" 
+                                   placeholder="e.g., 2025" min="2000" max="2030">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="current_status">Current Status</label>
+                            <select class="form-select" id="current_status" name="current_status">
+                                <option value="">Select Status</option>
+                                <option value="pursuing">Pursuing</option>
+                                <option value="completed">Completed</option>
+                                <option value="gap_year">Gap Year</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="percentage_cgpa">Percentage/CGPA</label>
+                            <input type="text" class="form-control" id="percentage_cgpa" name="percentage_cgpa" 
+                                   placeholder="e.g., 8.5 CGPA or 85%">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add Education</button>
+                        <a href="{{ url_for('profile.index') }}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

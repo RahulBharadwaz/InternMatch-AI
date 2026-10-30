@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">My Profile</h1>
+        
+        <!-- Profile Completion -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong>Profile Completion</strong>
+                    <span>{{ profile.completion_percentage if profile else 0 }}%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width: {{ profile.completion_percentage if profile else 0 }}%;"></div>
+                </div>
+                {% if profile and profile.completion_percentage < 100 %}
+                <p style="margin-top: 10px; font-size: 13px; color: #666;">
+                    Complete your profile to get better recommendations.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Personal Information -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body">
+                {% if profile %}
+                <table class="table">
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td>{{ current_user.full_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email:</strong></td>
+                        <td>{{ current_user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone:</strong></td>
+                        <td>{{ profile.phone_number or 'Not provided' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State:</strong></td>
+                        <td>{{ profile.state or 'Not provided' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>District:</strong></td>
+                        <td>{{ profile.district or 'Not provided' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preferred Language:</strong></td>
+                        <td>{{ profile.preferred_language|title }}</td>
+                    </tr>
+                </table>
+                {% else %}
+                <p class="text-muted">Profile not created yet.</p>
+                {% endif %}
+                <div style="margin-top: 20px;">
+                    <a href="{{ url_for('profile.edit') }}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Education -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-header">Education</div>
+            <div class="card-body">
+                {% if education %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Qualification</th>
+                            <th>Course</th>
+                            <th>Institution</th>
+                            <th>Year</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for edu in education %}
+                        <tr>
+                            <td>{{ edu.highest_qualification }}</td>
+                            <td>{{ edu.course }}</td>
+                            <td>{{ edu.institution }}</td>
+                            <td>{{ edu.graduation_year or '-' }}</td>
+                            <td>{{ edu.current_status|title }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted">No education records added.</p>
+                {% endif %}
+                <div style="margin-top: 20px;">
+                    <a href="{{ url_for('profile.add_education') }}" class="btn btn-secondary">Add Education</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preferences -->
+        {% if profile %}
+        <div class="card">
+            <div class="card-header">Preferences</div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Preferred Industries:</strong></td>
+                        <td>{{ profile.preferred_industries|replace('[', '')|replace(']', '')|replace("'", '')|replace('"', '') or 'Not specified' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preferred Domains:</strong></td>
+                        <td>{{ profile.preferred_domains|replace('[', '')|replace(']', '')|replace("'", '')|replace('"', '') or 'Not specified' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preferred Roles:</strong></td>
+                        <td>{{ profile.preferred_roles|replace('[', '')|replace(']', '')|replace("'", '')|replace('"', '') or 'Not specified' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Skills:</strong></td>
+                        <td>{{ profile.skills|replace('[', '')|replace(']', '')|replace("'", '')|replace('"', '') or 'Not specified' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Preferred Location:</strong></td>
+                        <td>{{ profile.preferred_location or 'Not specified' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Relocation Preference:</strong></td>
+                        <td>{{ profile.relocation_preference|title }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+

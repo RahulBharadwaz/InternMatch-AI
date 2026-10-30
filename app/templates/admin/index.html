@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Administrator Dashboard</h1>
+        
+        <!-- Statistics -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_users }}</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_opportunities }}</div>
+                <div class="stat-label">Total Opportunities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ published_opportunities }}</div>
+                <div class="stat-label">Published</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ sample_opportunities }}</div>
+                <div class="stat-label">Sample Records</div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="{{ url_for('admin.add_opportunity') }}" class="btn btn-primary">Add Opportunity</a>
+                    <a href="{{ url_for('admin.opportunities') }}" class="btn btn-secondary">Manage Opportunities</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+            <!-- Recent Users -->
+            <div class="card">
+                <div class="card-header">Recent Students</div>
+                <div class="card-body">
+                    {% if recent_users %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>{{ user.full_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No students registered yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Recent Opportunities -->
+            <div class="card">
+                <div class="card-header">Recent Opportunities</div>
+                <div class="card-body">
+                    {% if recent_opportunities %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Organization</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for opp in recent_opportunities %}
+                            <tr>
+                                <td>{{ opp.title }}</td>
+                                <td>{{ opp.organization.name }}</td>
+                                <td>
+                                    <span class="badge badge-{{ 'success' if opp.is_published else 'secondary' }}">
+                                        {{ 'Published' if opp.is_published else 'Draft' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No opportunities added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

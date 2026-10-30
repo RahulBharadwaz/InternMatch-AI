@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">How InternMatch Works</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <p style="line-height: 1.8; margin-bottom: 25px; font-size: 16px;">
+                    InternMatch operates an end-to-end Machine Learning and Natural Language Processing pipeline designed to convert unstructured resume text and student preferences into calibrated, explainable internship recommendations.
+                </p>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 1: Student Profile &amp; Preferences</h3>
+                    <p style="line-height: 1.8;">
+                        Create your candidate profile with your institution, academic qualification (e.g. B.Tech in Computer Science &amp; AI), preferred engineering domains (AI/ML, Backend, Cloud, Full-Stack), target job roles, and relocation preferences.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 2: Privacy-Preserving Resume Ingestion</h3>
+                    <p style="line-height: 1.8;">
+                        Upload your resume in <strong>PDF, DOCX, or TXT</strong> format. The system uses PyMuPDF and python-docx to extract text, followed by automated PII redaction to mask sensitive contact details (such as phone numbers and emails) prior to algorithmic processing and persistence.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 3: Canonical Skill Extraction &amp; Normalization</h3>
+                    <p style="line-height: 1.8;">
+                        Raw text is processed by a rule-based canonical skill extractor covering 6 specialized domains (Programming Languages, Frameworks, Cloud, Databases, Machine Learning, Soft Skills). Boundary-safe regular expressions guarantee that subwords (e.g., <em>Java</em> inside <em>JavaScript</em>) do not trigger erroneous extractions.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 4: Sentence-BERT Contextual Semantic Encoding</h3>
+                    <p style="line-height: 1.8;">
+                        To understand resume semantics beyond exact keywords, InternMatch uses the <strong><code>all-MiniLM-L6-v2</code> Sentence Transformer</strong>. The model projects resumes and opportunity descriptions into a 384-dimensional dense vector space and computes cosine similarities:
+                    </p>
+                    <div style="background-color: var(--light-gray); padding: 15px; border-left: 4px solid var(--secondary-blue); font-family: monospace; margin: 15px 0;">
+                        Cosine_Similarity(u, v) = (u &bull; v) / (||u|| * ||v||)
+                    </div>
+                    <p style="line-height: 1.8; margin-bottom: 0;">
+                        An in-memory embedding cache ensures that pre-computed opportunity vectors deliver sub-500ms inference response times.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 5: Explainable Multi-Factor Scoring</h3>
+                    <p style="line-height: 1.8; margin-bottom: 12px;">
+                        The final ranking score is computed via a transparent, weighted linear model balancing technical and contextual factors:
+                    </p>
+                    <ul style="line-height: 1.8; margin-left: 20px;">
+                        <li><strong>Skill Overlap (30%):</strong> Jaccard &amp; canonical match against required technical proficiencies.</li>
+                        <li><strong>Semantic Similarity (25%):</strong> Dense contextual alignment from Sentence-BERT.</li>
+                        <li><strong>Lexical Text Similarity (15%):</strong> Multi-document TF-IDF cosine similarity baseline.</li>
+                        <li><strong>Education Compatibility (15%):</strong> Academic qualification matching (B.Tech, M.Tech, CGPA).</li>
+                        <li><strong>Domain &amp; Role Preference (10%):</strong> Alignment with candidate's stated career targets.</li>
+                        <li><strong>Location Preference (5%):</strong> Proximity match or relocation willingness.</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 6: Skill Gap Analysis &amp; Learning Roadmap</h3>
+                    <p style="line-height: 1.8;">
+                        For every recommended role, InternMatch provides transparent explainability: why the match occurred, which candidate skills matched, and which skills are missing. Each missing skill links to verified, curated learning resources to help students upskill.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Step 7: Application Tracking</h3>
+                    <p style="line-height: 1.8;">
+                        Students can bookmark opportunities, follow direct application links, and update their application status across stages (Applied, Under Review, Shortlisted, Interview Scheduled, Offer Extended).
+                    </p>
+                </div>
+                
+                <div style="background-color: var(--light-gray); padding: 20px; border-left: 4px solid var(--success); margin-top: 30px; border-radius: 4px;">
+                    <h4 style="color: var(--primary-navy); margin-bottom: 10px;">Ready to Explore?</h4>
+                    <p style="line-height: 1.8; margin-bottom: 15px;">
+                        Get started by uploading your resume or exploring currently available technical internship opportunities.
+                    </p>
+                    <div class="d-flex gap-2">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('recommendations.index') }}" class="btn btn-primary">View My Recommendations</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Create Student Profile</a>
+                        {% endif %}
+                        <a href="{{ url_for('opportunities.explore') }}" class="btn btn-outline">Explore Internships</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

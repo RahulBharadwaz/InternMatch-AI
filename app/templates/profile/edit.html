@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Edit Profile</h1>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile.edit') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Personal Details</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label class="form-label" for="phone_number">Phone Number</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" 
+                                   value="{{ profile.phone_number if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="date_of_birth">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
+                                   value="{{ profile.date_of_birth.strftime('%Y-%m-%d') if profile and profile.date_of_birth else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="gender">Gender</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male" {% if profile and profile.gender == 'male' %}selected{% endif %}>Male</option>
+                                <option value="female" {% if profile and profile.gender == 'female' %}selected{% endif %}>Female</option>
+                                <option value="other" {% if profile and profile.gender == 'other' %}selected{% endif %}>Other</option>
+                                <option value="prefer_not_to_say" {% if profile and profile.gender == 'prefer_not_to_say' %}selected{% endif %}>Prefer not to say</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="state">State</label>
+                            <input type="text" class="form-control" id="state" name="state" 
+                                   value="{{ profile.state if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="district">District</label>
+                            <input type="text" class="form-control" id="district" name="district" 
+                                   value="{{ profile.district if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="city">City</label>
+                            <input type="text" class="form-control" id="city" name="city" 
+                                   value="{{ profile.city if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="preferred_language">Preferred Language</label>
+                            <select class="form-select" id="preferred_language" name="preferred_language">
+                                <option value="en" {% if profile and profile.preferred_language == 'en' %}selected{% endif %}>English</option>
+                                <option value="hi" {% if profile and profile.preferred_language == 'hi' %}selected{% endif %}>Hindi</option>
+                                <option value="mr" {% if profile and profile.preferred_language == 'mr' %}selected{% endif %}>Marathi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Employment Details</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label class="form-label" for="employment_status">Employment Status</label>
+                            <select class="form-select" id="employment_status" name="employment_status">
+                                <option value="">Select Status</option>
+                                <option value="student" {% if profile and profile.employment_status == 'student' %}selected{% endif %}>Student</option>
+                                <option value="unemployed" {% if profile and profile.employment_status == 'unemployed' %}selected{% endif %}>Unemployed</option>
+                                <option value="employed" {% if profile and profile.employment_status == 'employed' %}selected{% endif %}>Employed</option>
+                                <option value="self_employed" {% if profile and profile.employment_status == 'self_employed' %}selected{% endif %}>Self-Employed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="years_of_experience">Years of Experience</label>
+                            <input type="number" class="form-control" id="years_of_experience" name="years_of_experience" 
+                                   value="{{ profile.years_of_experience if profile else 0 }}" min="0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="current_employer">Current Employer (if employed)</label>
+                            <input type="text" class="form-control" id="current_employer" name="current_employer" 
+                                   value="{{ profile.current_employer if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="current_designation">Current Designation (if employed)</label>
+                            <input type="text" class="form-control" id="current_designation" name="current_designation" 
+                                   value="{{ profile.current_designation if profile else '' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="expected_salary">Expected Salary (Monthly)</label>
+                            <input type="text" class="form-control" id="expected_salary" name="expected_salary" 
+                                   value="{{ profile.expected_salary if profile else '' }}" placeholder="e.g., ₹25,000 - ₹35,000">
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Skills</h3>
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label class="form-label">Technical Skills</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label class="form-check"><input type="checkbox" name="skills" value="Python"> Python</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="JavaScript"> JavaScript</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Java"> Java</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="SQL"> SQL</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="C++"> C++</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="React"> React</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Node.js"> Node.js</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="HTML/CSS"> HTML/CSS</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Data Structures"> Data Structures</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Machine Learning"> Machine Learning</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Excel"> Excel</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Power BI"> Power BI</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Git"> Git</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="AWS"> AWS</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Docker"> Docker</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Problem Solving"> Problem Solving</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Communication"> Communication</label>
+                            <label class="form-check"><input type="checkbox" name="skills" value="Teamwork"> Teamwork</label>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--primary-navy); margin-bottom: 20px;">Preferences</h3>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label">Preferred Industries</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Information Technology"> Information Technology</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Data Analytics"> Data Analytics</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Cloud Computing"> Cloud Computing</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Manufacturing"> Manufacturing</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Finance"> Finance</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_industries" value="Healthcare"> Healthcare</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label">Preferred Domains</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label class="form-check"><input type="checkbox" name="preferred_domains" value="Web Development"> Web Development</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_domains" value="Data Science"> Data Science</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_domains" value="Cloud Computing"> Cloud Computing</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_domains" value="AI/ML"> AI/ML</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_domains" value="Cybersecurity"> Cybersecurity</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label">Preferred Roles</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label class="form-check"><input type="checkbox" name="preferred_roles" value="Backend Developer"> Backend Developer</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_roles" value="Frontend Developer"> Frontend Developer</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_roles" value="Data Analyst"> Data Analyst</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_roles" value="ML Engineer"> ML Engineer</label>
+                            <label class="form-check"><input type="checkbox" name="preferred_roles" value="DevOps Engineer"> DevOps Engineer</label>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label class="form-label" for="preferred_location">Preferred Location</label>
+                            <input type="text" class="form-control" id="preferred_location" name="preferred_location" 
+                                   value="{{ profile.preferred_location if profile else '' }}" placeholder="e.g., Bangalore, Mumbai">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="relocation_preference">Relocation Preference</label>
+                            <select class="form-select" id="relocation_preference" name="relocation_preference">
+                                <option value="no" {% if profile and profile.relocation_preference == 'no' %}selected{% endif %}>No</option>
+                                <option value="yes" {% if profile and profile.relocation_preference == 'yes' %}selected{% endif %}>Yes</option>
+                                <option value="maybe" {% if profile and profile.relocation_preference == 'maybe' %}selected{% endif %}>Maybe</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                        <a href="{{ url_for('profile.index') }}" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

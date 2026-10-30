@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Internships - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Explore Engineering Internships</h1>
+        <div class="card">
+            <div class="card-body" style="text-align: center; padding: 50px 20px;">
+                <h2 style="color: var(--primary-navy); margin-bottom: 15px;">Let Your Resume Guide Your Search</h2>
+                <p style="max-width: 680px; margin: 0 auto 25px; line-height: 1.8; color: var(--body-text);">
+                    InternMatch matches your technical skills, academic coursework, and engineering interests with open software engineering, AI/ML, and cloud internship opportunities using deep NLP semantic embeddings.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('recommendations.index') }}" class="btn btn-primary">View My AI Recommendations</a>
+                        <a href="{{ url_for('resume.upload') }}" class="btn btn-outline">Analyze or Update Resume</a>
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline">Candidate Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Log In to Get Matches</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline">Create Student Profile</a>
+                        <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline">How Matching Works</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Personalized AI Recommendations - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Your Personalized AI Recommendations</h1>
+        
+        {% if recommendation %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong>Generated:</strong> {{ recommendation.generated_at.strftime('%Y-%m-%d %H:%M') }}
+                    </div>
+                    <div>
+                        <strong>Algorithm:</strong> <span class="badge bg-primary">{{ recommendation.algorithm_version }}</span>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <form action="{{ url_for('recommendations.generate') }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit" class="btn btn-primary">Refresh Recommendations</button>
+                    </form>
+                    <a href="{{ url_for('opportunities.explore') }}" class="btn btn-outline">Explore All Internships</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card mb-4">
+            <div class="card-body text-center" style="padding: 40px 20px;">
+                <h3 style="color: var(--primary-navy); margin-bottom: 15px;">Discover Your Technical Internship Matches</h3>
+                <p style="max-width: 650px; margin: 0 auto 20px; line-height: 1.7; color: var(--body-text);">
+                    InternMatch analyzes your profile, uploaded resume, technical skills, degree status, and engineering interests against active opportunities using Sentence-BERT transformer embeddings.
+                </p>
+                <form action="{{ url_for('recommendations.generate') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-primary me-2">Generate Recommendations</button>
+                    <a href="{{ url_for('resume.upload') }}" class="btn btn-outline">Upload / Update Resume</a>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if recommendation and items %}
+            {% for item in items %}
+            <div class="opportunity-card mb-4 p-4 border rounded bg-white shadow-sm">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                            <h3 class="opportunity-title mb-0" style="color: var(--primary-navy);">{{ item.opportunity.title }}</h3>
+                            <span class="badge bg-success fs-6">{{ (item.match_score * 100)|round(1) }}% Match</span>
+                        </div>
+                        <p class="opportunity-organization text-primary fw-medium mb-2">{{ item.opportunity.organization.name }}</p>
+                        <p class="text-muted mb-3"><strong>Application Deadline:</strong>
+                            {% if item.opportunity.application_deadline %}
+                                {{ item.opportunity.application_deadline.strftime('%b %d, %Y') }}
+                                ({{ (item.opportunity.application_deadline - today).days }} days remaining)
+                            {% else %}
+                                Rolling Enrollment
+                            {% endif %}
+                        </p>
+                        
+                        <div style="margin: 15px 0; padding: 15px; background-color: var(--light-gray); border-left: 4px solid var(--secondary-blue); border-radius: 4px;">
+                            <strong>Why This Matches Your Profile:</strong>
+                            <p style="margin-top: 8px; line-height: 1.6; margin-bottom: 0;">{{ item.explanation }}</p>
+                        </div>
+                        
+                        <div class="row g-2 my-3 text-muted" style="font-size: 13px;">
+                            <div class="col-sm-6 col-md-4"><strong>Skills Overlap:</strong> {{ (item.skills_score * 100)|round(1) }}%</div>
+                            <div class="col-sm-6 col-md-4"><strong>Semantic Match (SBERT):</strong> {{ ((item.semantic_score if item.semantic_score is not none else item.text_similarity_score) * 100)|round(1) }}%</div>
+                            <div class="col-sm-6 col-md-4"><strong>TF-IDF Baseline:</strong> {{ (item.text_similarity_score * 100)|round(1) }}%</div>
+                            <div class="col-sm-6 col-md-4"><strong>Education Fit:</strong> {{ (item.education_score * 100)|round(1) }}%</div>
+                            <div class="col-sm-6 col-md-4"><strong>Preference Fit:</strong> {{ (item.preference_score * 100)|round(1) }}%</div>
+                            <div class="col-sm-6 col-md-4"><strong>Location Fit:</strong> {{ (item.location_score * 100)|round(1) }}%</div>
+                        </div>
+                        
+                        <div class="opportunity-skills mt-3">
+                            <strong style="font-size: 14px;">Matching Skills:</strong>
+                            <div style="margin-top: 6px;">
+                                {% set matching = json.loads(item.matching_skills) if item.matching_skills else [] %}
+                                {% for skill in matching %}
+                                <span class="badge bg-success-subtle text-success border border-success me-1 mb-1 p-2">✓ {{ skill }}</span>
+                                {% else %}
+                                <span class="text-muted" style="font-size: 13px;">No direct token overlap</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="opportunity-skills mt-3">
+                            <strong style="font-size: 14px;">Recommended Skills to Develop:</strong>
+                            <div style="margin-top: 6px;">
+                                {% set missing = json.loads(item.missing_skills) if item.missing_skills else [] %}
+                                {% for skill in missing %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger me-1 mb-1 p-2">+ {{ skill }}</span>
+                                {% else %}
+                                <span class="badge bg-info-subtle text-info border border-info p-2">All required skills matched!</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-gray); display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="{{ url_for('opportunities.detail', opportunity_id=item.opportunity.id) }}" class="btn btn-primary btn-sm">View Details</a>
+                    <a href="{{ url_for('applications.add', opportunity_id=item.opportunity.id) }}" class="btn btn-outline btn-sm">Track Application</a>
+                    {% if item.opportunity.source_url %}
+                    <a href="{{ item.opportunity.source_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">Visit Organization Portal</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% elif recommendation %}
+        <div class="card">
+            <div class="card-body text-center" style="padding: 40px;">
+                <p style="font-size: 18px; color: var(--body-text);">No matching recommendations calculated.</p>
+                <p class="text-muted">Ensure your profile is complete with technical skills and target roles, then regenerate matches.</p>
+                <div style="margin-top: 20px;">
+                    <a href="{{ url_for('profile.edit') }}" class="btn btn-primary">Update Profile</a>
+                    <a href="{{ url_for('resume.upload') }}" class="btn btn-outline">Upload Resume</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+

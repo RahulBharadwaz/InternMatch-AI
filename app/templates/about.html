@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}About InternMatch - AI-Powered Internship Recommendation Platform{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">About InternMatch</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 style="color: var(--primary-navy); margin-bottom: 20px;">Platform Overview</h2>
+                <p style="line-height: 1.8; margin-bottom: 20px;">
+                    <strong>InternMatch</strong> is an AI-powered internship recommendation and skill gap analysis platform architected to solve the pervasive disconnect between engineering students and internship opportunities. 
+                </p>
+                <p style="line-height: 1.8; margin-bottom: 20px;">
+                    Conventional job boards rely on rigid keyword matching or opaque applicant tracking systems (ATS), causing high false-negative rates for capable candidates whose resumes use equivalent synonyms or modern technical vocabularies. InternMatch replaces keyword rigidity with a <strong>hybrid information retrieval and NLP pipeline</strong> that blends deep semantic transformer embeddings (Sentence-BERT), canonical skill taxonomies, and multi-factor ranking.
+                </p>
+                
+                <h2 style="color: var(--primary-navy); margin-bottom: 20px; margin-top: 30px;">Core Engineering Pillars</h2>
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h4 style="color: var(--secondary-blue);">1. Contextual Semantics (Sentence-BERT)</h4>
+                            <p style="line-height: 1.6; margin-bottom: 0;">
+                                Maps resumes and role descriptions into a shared 384-dimensional dense semantic space using <code>all-MiniLM-L6-v2</code>. This resolves synonymy and conceptual relevance beyond exact token overlap.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h4 style="color: var(--secondary-blue);">2. Boundary-Safe Skill Extraction</h4>
+                            <p style="line-height: 1.6; margin-bottom: 0;">
+                                Multi-category canonical taxonomy covering 50+ technical, cloud, and ML concepts. Word-boundary guarded regex prevents substring collisions (e.g., distinguishing <em>Java</em> from <em>JavaScript</em>, and <em>C</em> from general letters).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h4 style="color: var(--secondary-blue);">3. Explainable Multi-Factor Ranking</h4>
+                            <p style="line-height: 1.6; margin-bottom: 0;">
+                                Recommendations are never black-box scores. Every match decomposes into skill overlap (30%), semantic similarity (25%), TF-IDF baseline (15%), education compatibility (15%), role preferences (10%), and location fit (5%).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h4 style="color: var(--secondary-blue);">4. Actionable Skill Gap Analytics</h4>
+                            <p style="line-height: 1.6; margin-bottom: 0;">
+                                Instead of simply rejecting or demoting candidate matches, InternMatch analyzes missing proficiencies and pairs them with curated learning resources to empower student career readiness.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 style="color: var(--primary-navy); margin-bottom: 20px;">Architect &amp; Lead Maintainer</h2>
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 style="color: var(--secondary-blue); margin-bottom: 8px;">Deevi Rahul Bharadwaz</h3>
+                        <p class="text-muted mb-2">
+                            <strong>B.Tech in Computer Science and Artificial Intelligence (2023 – 2027)</strong><br>
+                            Indian Institute of Information Technology, Lucknow (IIIT Lucknow) &bull; CGPA: 8.14 / 10.0
+                        </p>
+                        <p style="line-height: 1.7; margin-bottom: 15px;">
+                            Specializing in Machine Learning, Deep Learning, Natural Language Processing, and scalable software systems. Experienced in Python, PyTorch, C++, TypeScript, React, and FastAPI. Builder of UniLoop, CampusLink, DevDuel, and top performer in the Amazon ML Challenge 2026.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="https://github.com/RahulBharadwaz" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">GitHub Profile</a>
+                            <a href="https://linkedin.com/in/rahulbharadwaz" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">LinkedIn Profile</a>
+                            <a href="mailto:rahulbharadwazdeevi@gmail.com" class="btn btn-outline-secondary btn-sm">Email Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 style="color: var(--primary-navy); margin-bottom: 15px;">Engineering Standards &amp; Architecture</h2>
+                <div style="background-color: var(--light-gray); padding: 18px; border-left: 4px solid var(--secondary-blue); border-radius: 4px;">
+                    <p style="line-height: 1.7; margin-bottom: 0;">
+                        InternMatch is engineered from the ground up by <strong>Deevi Rahul Bharadwaz</strong>. The system introduces Sentence-BERT transformer embeddings, an explainable hybrid ranking engine, canonical skill normalization, offline IR evaluation benchmarking (NDCG@K, MRR@K), sub-500ms cached inference SLAs, and a 55+ test automated test suite.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

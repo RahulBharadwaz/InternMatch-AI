@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <h1 class="section-title">Frequently Asked Questions</h1>
+        
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div class="faq-item">
+                <div class="faq-question">What is InternMatch?</div>
+                <div class="faq-answer">
+                    InternMatch is an AI-powered internship recommendation and skill gap analysis platform designed specifically for computer science and engineering students. It matches candidate resumes and profiles with technical internship opportunities using deep NLP semantic embeddings (Sentence-BERT), canonical skill extraction, and explainable hybrid scoring.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How does recommendation scoring work?</div>
+                <div class="faq-answer">
+                    The recommendation engine uses an explainable multi-factor formula:
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Skill Overlap (30%):</strong> Jaccard matching against canonical technical proficiencies.</li>
+                        <li><strong>Semantic Similarity (25%):</strong> Dense vector representations via Sentence-BERT (<code>all-MiniLM-L6-v2</code>).</li>
+                        <li><strong>Lexical Text Similarity (15%):</strong> Multi-document TF-IDF cosine similarity.</li>
+                        <li><strong>Education Compatibility (15%):</strong> Degree level, graduation year, and academic status.</li>
+                        <li><strong>Domain &amp; Role Preference (10%):</strong> Alignment with user-selected interest areas.</li>
+                        <li><strong>Location Match (5%):</strong> Proximity match or relocation flexibility.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Why combine Sentence-BERT with TF-IDF?</div>
+                <div class="faq-answer">
+                    TF-IDF excels at detecting specific exact keywords (e.g., "PyTorch", "Kubernetes", "PostgreSQL"), whereas Sentence-BERT captures higher-level contextual meaning and semantic synonyms (e.g., recognizing that "neural network optimization" relates closely to "deep learning research"). Combining both yields the highest ranking precision (0.8667 P@3 vs 0.5333 for TF-IDF alone) and near-perfect NDCG.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How does skill gap analysis work?</div>
+                <div class="faq-answer">
+                    For every recommended internship, InternMatch breaks down the required skills into <strong>Matching Skills</strong> (which you already possess) and <strong>Recommended Skills to Develop</strong> (missing requirements). Each missing competency is paired with verified learning resources (documentation, specialized courses, tutorials) to give you a clear roadmap for upskilling.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How is my resume processed and is my privacy protected?</div>
+                <div class="faq-answer">
+                    Resumes are parsed locally using PyMuPDF (for PDFs) and python-docx (for DOCX files). Prior to text analysis, our parser runs automated regular expression masking to redact sensitive Personally Identifiable Information (PII) such as phone numbers and email addresses. Your files are stored securely and are only accessible from your authenticated account.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What file formats are supported for resume upload?</div>
+                <div class="faq-answer">
+                    InternMatch supports PDF, DOCX, and TXT files up to 16MB in size. We recommend standard single or two-column clean formats for optimal text extraction.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I edit my extracted profile and skills?</div>
+                <div class="faq-answer">
+                    Yes. After uploading a resume, you can review, edit, add, or remove extracted skills, education history, and career preferences directly from your Profile dashboard.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I track my applications?</div>
+                <div class="faq-answer">
+                    Whenever you find an internship you are interested in, you can click "Track Application" to add it to your Application Tracker. You can monitor dates, note follow-ups, and update status stages (Applied, Under Review, Shortlisted, Interview Scheduled, Offer Extended).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Who developed InternMatch?</div>
+                <div class="faq-answer">
+                    InternMatch is architected, developed, and maintained by <strong>Deevi Rahul Bharadwaz</strong>, a B.Tech Computer Science and Artificial Intelligence student at IIIT Lucknow. The project is open-source under the MIT License and hosted on <a href="https://github.com/RahulBharadwaz/InternMatch-AI" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h3 style="color: var(--primary-navy); margin-bottom: 12px;">Have more questions?</h3>
+                    <p style="line-height: 1.8; margin-bottom: 15px;">
+                        Check out our architectural documentation or contact the maintainer directly.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('main.about') }}" class="btn btn-primary">About InternMatch</a>
+                        <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline">How It Works</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

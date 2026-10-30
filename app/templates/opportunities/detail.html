@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ opportunity.title }} - InternMatch{% endblock %}
+
+{% block content %}
+<section class="section" style="background-color: var(--white);">
+    <div class="container">
+        <div style="margin-bottom: 20px;">
+            <a href="{{ url_for('opportunities.explore') }}" style="color: var(--secondary-blue);">← Back to Matches</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        {% if opportunity.is_sample %}
+                        <span class="badge bg-secondary" style="margin-bottom: 10px;">Sample Technical Role</span>
+                        {% endif %}
+                        <h1 style="color: var(--primary-navy); margin-bottom: 10px;">{{ opportunity.title }}</h1>
+                        <h3 style="color: var(--secondary-blue);">{{ opportunity.organization.name }}</h3>
+                    </div>
+                    <div style="text-align: right;">
+                        {% if is_saved %}
+                        <form action="{{ url_for('opportunities.unsave', opportunity_id=opportunity.id) }}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-secondary">Unsave</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('opportunities.save', opportunity_id=opportunity.id) }}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-outline">Save Opportunity</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0; padding: 20px; background-color: var(--light-gray); border-radius: 4px;">
+                    <div>
+                        <strong>Location:</strong><br>
+                        {{ opportunity.location }}
+                    </div>
+                    <div>
+                        <strong>Duration:</strong><br>
+                        {{ opportunity.duration }}
+                    </div>
+                    <div>
+                        <strong>Stipend:</strong><br>
+                        {{ opportunity.stipend }}
+                    </div>
+                    <div>
+                        <strong>Domain:</strong><br>
+                        {{ opportunity.domain }}
+                    </div>
+                    <div>
+                        <strong>Role Type:</strong><br>
+                        {{ opportunity.role_type }}
+                    </div>
+                    <div>
+                        <strong>Application Deadline:</strong><br>
+                        {{ opportunity.application_deadline.strftime('%Y-%m-%d') if opportunity.application_deadline else 'Rolling' }}
+                    </div>
+                </div>
+                
+                <h3 style="color: var(--primary-navy); margin-bottom: 15px;">Role Description</h3>
+                <p style="line-height: 1.8; margin-bottom: 30px;">{{ opportunity.description }}</p>
+                
+                <h3 style="color: var(--primary-navy); margin-bottom: 15px;">Candidate Requirements</h3>
+                <table class="table" style="margin-bottom: 30px;">
+                    <tr>
+                        <td style="width: 250px;"><strong>Qualification Required:</strong></td>
+                        <td>{{ opportunity.qualification_required }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Academic Standing / Min %:</strong></td>
+                        <td>{{ opportunity.minimum_percentage }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Experience / Level:</strong></td>
+                        <td>{{ opportunity.experience_required or 'Freshers / Engineering Students' }}</td>
+                    </tr>
+                </table>
+                
+                <h3 style="color: var(--primary-navy); margin-bottom: 15px;">Required Technical Skills</h3>
+                <div style="margin-bottom: 30px;">
+                    {% set skills = json.loads(opportunity.skills_required) if opportunity.skills_required else [] %}
+                    {% for skill in skills %}
+                    <span class="skill-tag" style="background-color: #e2e8f0; color: #1e293b; font-weight: 500; margin-right: 6px; padding: 4px 10px; border-radius: 4px;">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+                
+                <h3 style="color: var(--primary-navy); margin-bottom: 15px;">Organization Overview</h3>
+                <table class="table" style="margin-bottom: 30px;">
+                    <tr>
+                        <td style="width: 250px;"><strong>Organization:</strong></td>
+                        <td>{{ opportunity.organization.name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Industry Sector:</strong></td>
+                        <td>{{ opportunity.organization.sector }}</td>
+                    </tr>
+                    {% if opportunity.organization.website %}
+                    <tr>
+                        <td><strong>Website:</strong></td>
+                        <td><a href="{{ opportunity.organization.website }}" target="_blank" rel="noopener noreferrer">{{ opportunity.organization.website }}</a></td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
+                <div style="display: flex; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-gray); flex-wrap: wrap;">
+                    <a href="{{ opportunity.source_url or '#' }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Apply / View Organization Portal</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('applications.add', opportunity_id=opportunity.id) }}" class="btn btn-outline">Track Application</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Track Application</a>
+                    {% endif %}
+                    <a href="{{ url_for('opportunities.explore') }}" class="btn btn-outline">Back to Opportunities</a>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 18px; background-color: var(--light-gray); border-left: 4px solid var(--secondary-blue); border-radius: 4px;">
+                    <strong>Application &amp; Verification Note:</strong>
+                    <p style="margin-top: 8px; margin-bottom: 0; font-size: 13px; line-height: 1.6; color: #475569;">
+                        This opportunity is verified within InternMatch for algorithmic matching and skill gap evaluation. Final hiring decisions, interview scheduling, and application requirements are managed by the hiring organization.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

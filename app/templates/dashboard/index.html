@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - InternMatch{% endblock %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div class="container">
+        <h1 class="dashboard-welcome">Welcome, {{ current_user.full_name }}!</h1>
+        <p style="color: var(--body-text); margin-top: 10px;">Here's an overview of your internship journey.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <!-- Statistics -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-value">{{ profile.completion_percentage if profile else 0 }}%</div>
+                <div class="stat-label">Profile Complete</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ applications_count }}</div>
+                <div class="stat-label">Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ saved_count }}</div>
+                <div class="stat-label">Saved Opportunities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ unread_notifications }}</div>
+                <div class="stat-label">Unread Notifications</div>
+            </div>
+        </div>
+        
+        <!-- Profile Completion Alert -->
+        {% if profile and profile.completion_percentage < 50 %}
+        <div class="alert alert-warning">
+            <strong>Complete Your Profile:</strong> Your profile is only {{ profile.completion_percentage }}% complete. 
+            <a href="{{ url_for('profile.edit') }}" style="color: inherit; text-decoration: underline;">Complete your profile</a> 
+            to get better recommendations.
+        </div>
+        {% endif %}
+        
+        <!-- Quick Actions -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="{{ url_for('profile.edit') }}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{{ url_for('resume.upload') }}" class="btn btn-secondary">Upload Resume</a>
+                    <form action="{{ url_for('recommendations.generate') }}" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit" class="btn btn-outline">Generate Recommendations</button>
+                    </form>
+                    <a href="{{ url_for('opportunities.explore') }}" class="btn btn-outline">Recommended Internships</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+            <!-- Recent Applications -->
+            <div class="card">
+                <div class="card-header">Recent Applications</div>
+                <div class="card-body">
+                    {% if recent_applications %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Opportunity</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in recent_applications %}
+                                <tr>
+                                    <td>{{ app.opportunity.title }}</td>
+                                    <td>
+                                        <span class="badge badge-info">{{ app.status|title }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="{{ url_for('applications.index') }}" class="btn btn-sm btn-outline">View All Applications</a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No applications yet.</p>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="{{ url_for('opportunities.explore') }}" class="btn btn-sm btn-primary">Find My Matches</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Notifications -->
+            <div class="card">
+                <div class="card-header">Notifications</div>
+                <div class="card-body">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                        <div style="padding: 10px; border-bottom: 1px solid var(--border-gray); {% if not notification.is_read %}background-color: var(--light-gray);{% endif %}">
+                            <strong>{{ notification.title }}</strong>
+                            <p style="margin: 5px 0; font-size: 13px;">{{ notification.message }}</p>
+                            <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No notifications.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommendations Section -->
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">Your Recommendations</div>
+            <div class="card-body">
+                <p style="margin-bottom: 15px;">Get personalized internship recommendations based on your profile.</p>
+                <form action="{{ url_for('recommendations.generate') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-primary">Generate Recommendations</button>
+                </form>
+                <div style="margin-top: 15px;">
+                    <a href="{{ url_for('recommendations.index') }}" class="btn btn-outline">View Previous Recommendations</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
