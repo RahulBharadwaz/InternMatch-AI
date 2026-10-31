@@ -142,6 +142,30 @@ templates/
 - Macros for reusable components
 - Custom filters for data formatting
 
+### 6. Vector Index & Nearest Neighbor Layer (FAISS)
+
+`
+app/services/vector_index.py
+├── FAISSVectorIndex
+│   ├── IndexFlatIP (Exact Cosine Inner Product)
+│   ├── IndexHNSWFlat (Approximate Nearest Neighbors Graph)
+│   ├── build_index(opp_ids, embeddings)
+│   ├── add_or_update(opp_id, embedding)
+│   ├── search(query_embedding, top_k)
+│   └── save() / load() persistence
+`
+
+### 7. Computer Vision & Bias-Free Redaction Engine (OpenCV)
+
+`
+app/services/document_vision.py
+├── DocumentVisionEngine
+│   ├── render_pdf_to_image() -> PyMuPDF high-DPI rendering
+│   ├── detect_document_layout() -> Grayscale + Otsu + Morphological kernels
+│   ├── detect_and_redact_photo() -> OpenCV Haar Cascade + Portrait frame heuristic
+│   └── generate_annotated_layout_image() -> Overlay bounding boxes & tags
+`
+
 ## Data Flow Diagrams
 
 ### User Registration Flow

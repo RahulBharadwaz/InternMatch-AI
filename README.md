@@ -1,12 +1,13 @@
-# InternMatch: AI-Powered Internship Recommendation and Skill Gap Analysis Platform
+# InternMatch: Multimodal AI Internship Recommendation Engine & Vector-Accelerated Platform
 
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
-[![Framework](https://img.shields.io/badge/Framework-Flask%203.x-lightgrey.svg)](https://flask.palletsprojects.com/)
-[![NLP](https://img.shields.io/badge/NLP-Sentence--BERT%20%7C%20TF--IDF-orange.svg)](https://sbert.net/)
-[![Tests](https://img.shields.io/badge/Tests-55%20Passed%20(100%25)-brightgreen.svg)]()
+[![Vector Search](https://img.shields.io/badge/Vector%20Search-FAISS%20(IndexFlatIP%20%26%20HNSW)-green.svg)](https://github.com/facebookresearch/faiss)
+[![Vision](https://img.shields.io/badge/Vision-OpenCV%20Document%20Intelligence-red.svg)](https://opencv.org/)
+[![Deep Learning](https://img.shields.io/badge/Deep%20Learning-PyTorch%20%7C%20Sentence--BERT-orange.svg)](https://pytorch.org/)
+[![Tests](https://img.shields.io/badge/Tests-67%20Passed%20(100%25)-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **InternMatch** is an open-source, production-grade AI platform engineered and maintained by **Deevi Rahul Bharadwaz** (Indian Institute of Information Technology, Lucknow), introducing Sentence-BERT semantic embeddings, an explainable hybrid ranking engine, canonical skill taxonomy, privacy-preserving resume parsing, offline IR evaluation benchmarking, and an exhaustive 55-test verification suite.
+> **InternMatch** is an open-source, production-grade multimodal AI platform engineered and maintained by **Deevi Rahul Bharadwaz** (Indian Institute of Information Technology, Lucknow). It combines **OpenCV computer vision document layout intelligence**, **unbiased photo redaction**, **FAISS vector indexing**, **native PyTorch contrastive fine-tuning (InfoNCE loss)**, and **explainable hybrid recommendation**, verified by a **67-test automated verification suite**.
 
 ---
 
@@ -51,18 +52,22 @@ For computer science and engineering students navigating technical career transi
 1. **Intelligent Semantic Search**: Identifies opportunities aligned with genuine project and coursework experience, even when phrasing differs from the job specification.
 2. **Actionable Skill Gap Analytics**: For every recommended role, InternMatch highlights **Matching Skills** (e.g., Python, PyTorch, Docker) alongside **Recommended Skills to Develop** (e.g., FastAPI, Kubernetes), pairing missing proficiencies with verified learning roadmaps.
 3. **Privacy-Preserving Parsing**: Automatically masks phone numbers and email addresses via regular-expression redaction during the ingestion phase prior to persistent storage.
-4. **Sub-5ms Cached Inference**: Bi-encoder Sentence-BERT embeddings are cached in-memory, enabling real-time ranking and sub-second SLAs.
+4. **Sub-3ms FAISS Vector Search**: Facebook AI Similarity Search (IndexFlatIP and IndexHNSWFlat) indexing provides sub-millisecond similarity lookups over dense 384-dim candidate-job vectors.
+5. **Computer Vision Unbiased Screening**: OpenCV layout analysis segments document visual zones while automatically detecting and redacting candidate portrait photos/avatars to eliminate demographic hiring bias.
 
 ---
 
 ## 3. Key Features
 
+* **Computer Vision Layout & Bias-Free Redaction Engine**: OpenCV morphological kernels (`cv2.morphologyEx`) segment document zones (Headers, Columns, Body Sections), while Haar Cascade classifiers detect candidate face portraits and apply solid Gaussian privacy masks.
+* **FAISS Vector Indexing Service**: High-performance vector database integration (`IndexFlatIP` and graph-based `IndexHNSWFlat`) providing <3ms nearest neighbor retrieval across thousands of opportunities.
+* **PyTorch Contrastive Fine-Tuning Pipeline**: Standalone native PyTorch training module (`scripts/train_biencoder.py`) that fine-tunes Sentence-BERT bi-encoders using MultipleNegativesRankingLoss / InfoNCE contrastive learning on domain-specific triplets.
+* **Interactive Streamlit Visualizer**: Real-time recruiter demo dashboard (`demo_app.py`) featuring drag-and-drop resume analysis, side-by-side vision segmentation previews, and latency gauges.
 * **Multi-Format Privacy-First Parser**: Ingests PDF (`PyMuPDF`), DOCX (`python-docx`), and TXT resumes. Strips control characters, normalizes whitespace, and automatically redacts PII (`[PHONE_REDACTED]`, `[EMAIL_REDACTED]`).
-* **Canonical Skill Taxonomy & Synonym Normalizer**: Normalizes industry aliases (e.g., `k8s` → `Kubernetes`, `reactjs` → `React`, `py` → `Python`, `postgres` → `PostgreSQL`) while enforcing strict word-boundary guards to eliminate false positives (e.g., distinguishing `Java` from `JavaScript`, `C` from `CSS`).
+* **Canonical Skill Taxonomy & Synonym Normalizer**: Normalizes industry aliases (e.g., `k8s` → `Kubernetes`, `reactjs` → `React`, `py` → `Python`, `postgres` → `PostgreSQL`) while enforcing strict word-boundary guards to eliminate false positives.
 * **Dual NLP Similarity Engine**:
   * **TF-IDF Baseline**: Multi-document unigram/bigram vectorization for exact lexical matching.
   * **Sentence-BERT (`all-MiniLM-L6-v2`)**: Computes 384-dimensional dense semantic vectors with mean token pooling and $L_2$ normalization for fast cosine distance calculation.
-* **Dynamic Embedding Cache**: In-memory cache (`_OPPORTUNITY_EMBEDDING_CACHE`) pre-computes opportunity vector representations, reducing ranking latency from 100ms+ to <5ms.
 * **Explainable Multi-Factor Scoring**: Transparent weighted scoring across Skill Overlap (30%), Semantic Similarity (25%), TF-IDF (15%), Education Fit (15%), Domain Preference (10%), and Location (5%).
 * **Application Lifecycle Tracker**: Complete state management (`Interested`, `Preparing`, `Applied`, `Assessment/Interview`, `Selected`, `Rejected`, `Withdrawn`) with notes and reminders.
 * **Role-Based Access Control (RBAC)**: Secure separation between student and administrator workflows, fortified with CSRF tokens and secure session management.
@@ -73,15 +78,17 @@ For computer science and engineering students navigating technical career transi
 
 | Layer | Technologies | Purpose |
 | :--- | :--- | :--- |
+| **Vector Indexing & ANN** | `faiss-cpu` (Facebook AI Similarity Search) | High-speed IndexFlatIP and IndexHNSWFlat vector retrieval (<3ms) |
+| **Computer Vision & Layout**| `opencv-python` (cv2), `PyMuPDF` (fitz) | Morphological document segmentation, Haar Cascade photo redaction |
+| **Deep Learning & PyTorch** | `torch`, `sentence-transformers`, `transformers` | InfoNCE contrastive training, bi-encoder 384-dim semantic embeddings |
 | **Backend Framework** | Python 3.10–3.13, Flask 3.x, Werkzeug | Modular application factory, blueprint routing |
+| **Interactive Visualizer** | `streamlit`, `altair`, `matplotlib` | Real-time recruiter multimodal exploration dashboard (`demo_app.py`) |
 | **Authentication & Security** | Flask-Login, Flask-WTF, Werkzeug Security | PBKDF2 password hashing, session cookies, CSRF protection |
 | **ORM & Persistence** | SQLAlchemy 2.x, Flask-SQLAlchemy, SQLite / MySQL | Multi-engine relational models, zero-config default SQLite |
-| **Deep Learning & NLP** | `sentence-transformers`, `transformers`, `torch` | Pretrained `all-MiniLM-L6-v2` dense sentence embeddings |
 | **Machine Learning Baseline**| `scikit-learn`, `numpy` | `TfidfVectorizer`, Cosine Similarity matrix operations |
 | **Document Processing** | `PyMuPDF` (fitz), `python-docx` | PDF page extraction, DOCX paragraph and table parsing |
 | **Evaluation & Metrics** | Custom Information Retrieval suite | P@K, R@K, NDCG@K, MRR@K, Latency Benchmarking |
-| **Frontend** | HTML5, CSS3, JavaScript, Bootstrap 5 | Modern engineering UI, responsive cards, interactive analytics |
-| **Testing** | `pytest`, `pytest-cov` | 55 automated unit, integration, and performance benchmark tests |
+| **Testing** | `pytest`, `pytest-cov` | 67 automated unit, integration, and performance benchmark tests (100% pass) |
 
 ---
 
@@ -292,20 +299,26 @@ InternMatch-AI/
 │   │   ├── admin.py               # Administrator panel
 │   │   └── errors.py              # HTTP 403, 404, 500 handlers
 │   ├── services/                  # Core AI/ML business logic
+│   │   ├── vector_index.py        # FAISS IndexFlatIP & IndexHNSWFlat indexing
+│   │   ├── document_vision.py     # OpenCV layout segmentation & photo redaction
 │   │   ├── skill_extractor.py     # Canonical taxonomy and boundary regex
 │   │   ├── resume_parser.py       # Multi-format parser with PII redaction
 │   │   ├── eligibility_engine.py  # Rule evaluator (qualifications, age, status)
-│   │   ├── recommendation_engine.py # Hybrid recommender (TF-IDF + SBERT + Rules)
+│   │   ├── recommendation_engine.py # Hybrid recommender (FAISS + TF-IDF + SBERT)
 │   │   └── evaluation.py          # Precision@K, Recall@K, NDCG@K, MRR@K
 │   ├── templates/                 # Jinja2 HTML templates
 │   └── static/                    # CSS, JavaScript, and assets
 ├── scripts/
+│   ├── train_biencoder.py         # Native PyTorch contrastive fine-tuning (InfoNCE)
 │   ├── init_db.py                 # Schema initialization
 │   ├── migrate_profile_skills.py  # Additive database migrations
 │   ├── seed_demo_data.py          # Verified demonstration dataset
 │   ├── create_admin.py            # CLI admin account generator
 │   └── evaluate_models.py         # Comprehensive offline evaluation script
-├── tests/                         # Pytest automated test suite (55 tests)
+├── tests/                         # Pytest automated test suite (67 tests, 100% pass)
+│   ├── test_vector_index.py       # FAISS indexing, persistence, and latency tests
+│   ├── test_document_vision.py    # OpenCV layout & photo redaction tests
+│   ├── test_fine_tuning.py        # InfoNCE loss & triplet validation tests
 │   ├── test_skill_extractor.py
 │   ├── test_resume_parser.py
 │   ├── test_eligibility_engine.py
@@ -316,6 +329,7 @@ InternMatch-AI/
 │   ├── test_recommendations.py
 │   ├── test_database_migrations.py
 │   └── test_benchmark.py
+├── demo_app.py                    # Streamlit interactive multimodal dashboard
 ├── config.py                      # Multi-environment configuration (SQLite/MySQL)
 ├── evaluation_report.json         # Empirical evaluation output artifact
 ├── requirements.txt               # Pinned Python dependencies
@@ -327,25 +341,43 @@ InternMatch-AI/
 
 ---
 
-## 11. Limitations & Future Roadmap
+## 11. Interactive Streamlit Visualizer & Demo
 
-### Current Limitations:
-1. **Scanned Image PDFs**: Resumes saved strictly as non-selectable scanned images require OCR pre-processing (e.g., Tesseract); currently, InternMatch parses digital text streams in PDF, DOCX, and TXT files to minimize deployment footprints.
-2. **Cold-Start Transformer Loading**: The first invocation of Sentence-BERT downloads weights (~80MB) and initializes PyTorch tensors into RAM (~1.5s one-time cost).
+Run the interactive multimodal recruiter demonstration dashboard:
 
-### Planned Enhancements:
-* [ ] Multi-lingual Indian language embeddings using IndicBERT for regional language resume parsing.
-* [ ] Asynchronous Celery background workers for batch email notifications upon new internship releases.
-* [ ] Interactive LLM-powered resume optimization tips tailored to specific recommended internships.
+```bash
+streamlit run demo_app.py
+```
+
+Features included in the visualizer:
+1. **Live OpenCV Document Layout Analysis**: Upload any PDF/Image resume and view colored bounding box contours classifying Header, Content Body, and Columns.
+2. **Automated Unbiased Photo Redaction**: Automatically detects face portraits/avatars and applies privacy blurs before candidate evaluation.
+3. **Sub-3ms FAISS Vector Search**: Queries candidate embeddings across the opportunity catalog and measures retrieval latency.
+4. **PyTorch Training Analytics**: Inspects real-time InfoNCE loss curves and Pearson correlation metrics.
 
 ---
 
-## 12. Author & Maintainer
+## 12. Native PyTorch Contrastive Fine-Tuning
+
+To execute the bi-encoder contrastive fine-tuning pipeline on domain-specific triplets:
+
+```bash
+python scripts/train_biencoder.py --epochs 3 --batch-size 4 --lr 2e-5
+```
+
+Artifacts generated:
+* Model weights & tokenizer: `instance/fine_tuned_sbert/`
+* Loss convergence plot: `reports/training_loss_curve.png`
+* Training summary metrics: `reports/fine_tuning_summary.json`
+
+---
+
+## 13. Author & Maintainer
 
 * **Deevi Rahul Bharadwaz**
-  * **Education**: B.Tech in Computer Science and Artificial Intelligence (2023–2027), Indian Institute of Information Technology, Lucknow (IIIT Lucknow) &bull; CGPA: 8.14 / 10.0
+  * **Education**: B.Tech in Computer Science and Artificial Intelligence (2023–2027), Indian Institute of Information Technology, Lucknow (IIIT Lucknow) &bull; CGPA: 8.34 / 10.0
   * **GitHub**: [@RahulBharadwaz](https://github.com/RahulBharadwaz)
   * **LinkedIn**: [in/rahulbharadwaz](https://linkedin.com/in/rahulbharadwaz)
   * **Email**: rahulbharadwazdeevi@gmail.com
-  * **Featured Projects**: UniLoop, CampusLink, DevDuel, Amazon ML Challenge 2026.
+  * **Featured Projects**: UniLoop, CampusLink, InternMatch AI, Amazon ML Challenge 2026.
 
