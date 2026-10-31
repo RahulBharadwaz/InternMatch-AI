@@ -21,13 +21,21 @@ from app.models import (
 )
 from app.services.eligibility_engine import EligibilityEngine
 from app.services.skill_extractor import SkillExtractor
+from app.services.vector_index import FAISSVectorIndex
 from config import Config
 
 logger = logging.getLogger(__name__)
 
-# Global singletons for model and embedding cache across requests
+# Global singletons for model, FAISS index, and embedding cache across requests
 _SBERT_MODEL = None
+_FAISS_INDEX = FAISSVectorIndex(dimension=384, index_type='flat')
 _OPPORTUNITY_EMBEDDING_CACHE: Dict[int, Tuple[datetime, np.ndarray]] = {}
+
+
+def get_faiss_index() -> FAISSVectorIndex:
+    """Return the global FAISS vector index singleton."""
+    global _FAISS_INDEX
+    return _FAISS_INDEX
 
 
 def get_sbert_model():
@@ -364,11 +372,16 @@ class RecommendationEngine:
                     opp_embeddings[idx] = new_emb
                     _OPPORTUNITY_EMBEDDING_CACHE[opp.id] = (opp.last_updated, new_emb)
 
-            # 3. Compute cosine similarities (dot product with unit vectors)
+            # 3. Synchronize FAISS Vector Index and retrieve similarities
             embeddings_matrix = np.vstack(opp_embeddings)
-            sims = np.dot(embeddings_matrix, user_embedding)
-            # Clip between 0 and 1
-            return [float(max(0.0, min(1.0, (s + 1.0) / 2.0 if s < 0 else s))) for s in sims]
+            opp_ids = [opp.id for opp in opportunities]
+
+            # Re-index if count changed or index uninitialized
+            if _FAISS_INDEX.total_vectors != len(opportunities):
+                _FAISS_INDEX.build_index(opp_ids, embeddings_matrix)
+
+            # Query FAISS vector index with user embedding
+            return _FAISS_INDEX.get_similarities_for_opportunities(user_embedding, opp_ids)
 
         except Exception as e:
             logger.exception("Semantic similarity computation encountered error: %s", e)
