@@ -62,3 +62,8 @@ uploads/*
 .env.local
 .env.*.local
 *.log
+
+# Personal candidate and resume documents
+Rahul_Resume_AIRA_Matrix.pdf
+Rahul_Resume_AIRA_Matrix.tex
+
