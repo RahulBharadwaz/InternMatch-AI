@@ -1,0 +1,19 @@
+{
+  "base_model": "all-MiniLM-L6-v2",
+  "architecture": "Sentence-BERT Bi-Encoder (PyTorch)",
+  "loss_function": "InfoNCE / MultipleNegativesRankingLoss",
+  "device": "cpu",
+  "epochs": 3,
+  "batch_size": 4,
+  "learning_rate": 2e-05,
+  "temperature": 0.05,
+  "epoch_losses": [
+    0.42423564319809276,
+    0.33358266452948254,
+    0.06156019990642866
+  ],
+  "initial_correlation": -0.740420711478306,
+  "final_correlation": -0.5370025502542044,
+  "output_directory": "instance/fine_tuned_sbert",
+  "curve_plot": "reports\\training_loss_curve.png"
+}
